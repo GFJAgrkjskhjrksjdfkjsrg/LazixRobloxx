@@ -339,7 +339,7 @@ local TackleSection = HitboxTab:CreateSection("TackleHitbox")
 
 HitboxTab:CreateToggle({
 
-   Name = "Tackle Hitbox",
+   Name = "TackleHitbox",
 
    CurrentValue = false,
 
@@ -359,7 +359,7 @@ HitboxTab:CreateToggle({
 
 HitboxTab:CreateInput({
 
-   Name = "TackleHitbox (X)",
+   Name = "Tackle Hitbox (X)",
 
    CurrentValue = tostring(tackleHitboxX),
 
@@ -388,7 +388,7 @@ HitboxTab:CreateInput({
 
 HitboxTab:CreateInput({
 
-   Name = "TackleHitbox (Y)",
+   Name = "Tackle Hitbox (Y)",
 
    CurrentValue = tostring(tackleHitboxY),
 
@@ -417,7 +417,7 @@ HitboxTab:CreateInput({
 
 HitboxTab:CreateInput({
 
-   Name = "TackleHitbox (Z)",
+   Name = "Tackle Hitbox (Z)",
 
    CurrentValue = tostring(tackleHitboxZ),
 
