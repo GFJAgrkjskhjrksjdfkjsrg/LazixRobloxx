@@ -3,103 +3,229 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "KSG HUB",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   Icon = 0,
    LoadingTitle = "Best FSS scripts",
    LoadingSubtitle = "by LazixRobloxx",
-   ShowText = "Rayfield", -- for mobile users to unhide Rayfield, change if you'd like
-   Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+   ShowText = "Rayfield",
+   Theme = "Amethyst",
 
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+   ToggleUIKeybind = "K",
 
    DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
-
-   -- ScriptID = "sid_xxxxxxxxxxxx", -- Your Script ID from developer.sirius.menu — enables analytics, managed keys, and script hosting
+   DisableBuildWarnings = false,
 
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = "LazixRobloxx", -- Create a custom folder for your hub/game
+      FolderName = "LazixRobloxx",
       FileName = "Ksg script"
    },
 
 
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = false,
+
    KeySettings = {
       Title = "Lazix Keys",
       Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Lazix Key", -- It is recommended to use something unique, as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"LazixPlaystyle"} -- List of keys that the system will accept, can be RAW file links (pastebin, github, etc.) or simple strings ("hello", "key22")
+      Note = "No method of obtaining the key is provided",
+      FileName = "Lazix Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"LazixPlaystyle"}
    }
 })
 
 
+-- Services
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+
+
+-- Settings
+local hitboxEnabled = false
+
+local hitboxX = 4.521
+local hitboxY = 5.73
+local hitboxZ = 2.398
+
+
+local originalSize = nil
+
+
+-- Hitbox Function
+local function updateHitbox()
+
+    local character = player.Character
+
+    if not character then
+        return
+    end
+
+    local hitbox = character:FindFirstChild("Hitbox")
+
+    if hitbox and hitbox:IsA("BasePart") then
+        
+        if hitboxEnabled then
+
+            if not originalSize then
+                originalSize = hitbox.Size
+            end
+
+            hitbox.Size = Vector3.new(
+                hitboxX,
+                hitboxY,
+                hitboxZ
+            )
+
+            hitbox.Transparency = 1
+
+        else
+
+            if originalSize then
+                hitbox.Size = originalSize
+            end
+
+        end
+
+    end
+end
+
+
+-- Character respawn support
+player.CharacterAdded:Connect(function(character)
+
+    originalSize = nil
+
+    local hitbox = character:WaitForChild("Hitbox", 5)
+
+    if hitbox then
+        updateHitbox()
+    end
+
+end)
+
+
+-- Tab
 
 local HitboxTab = Window:CreateTab("Hitbox", "box")
 
 local Section = HitboxTab:CreateSection("Hitbox Settings")
 
--- Zmienne
-local hitboxX = 4.521
-local hitboxY = 5.73
-local hitboxZ = 2.398
 
 local Toggle = HitboxTab:CreateToggle({
+
    Name = "Hitbox",
+
    CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+
+   Flag = "Toggle1",
+
    Callback = function(Value)
 
+      hitboxEnabled = Value
+
+      updateHitbox()
+
    end,
+
 })
 
+
 HitboxTab:CreateInput({
+
    Name = "Hitbox (X)",
+
    CurrentValue = tostring(hitboxX),
+
    PlaceholderText = "4.521",
+
    RemoveTextAfterFocusLost = false,
+
    Flag = "HitboxX",
+
    Callback = function(Text)
+
       local value = tonumber(Text)
+
       if value then
+
          hitboxX = value
+
+         updateHitbox()
+
       end
+
    end,
+
 })
 
+
 HitboxTab:CreateInput({
+
    Name = "Hitbox (Y)",
+
    CurrentValue = tostring(hitboxY),
+
    PlaceholderText = "5.73",
+
    RemoveTextAfterFocusLost = false,
+
    Flag = "HitboxY",
+
    Callback = function(Text)
+
       local value = tonumber(Text)
+
       if value then
+
          hitboxY = value
+
+         updateHitbox()
+
       end
+
    end,
+
 })
 
+
 HitboxTab:CreateInput({
+
    Name = "Hitbox (Z)",
+
    CurrentValue = tostring(hitboxZ),
+
    PlaceholderText = "2.398",
+
    RemoveTextAfterFocusLost = false,
+
    Flag = "HitboxZ",
+
    Callback = function(Text)
+
       local value = tonumber(Text)
+
       if value then
+
          hitboxZ = value
+
+         updateHitbox()
+
       end
+
    end,
+
 })
+
 
 Rayfield:Notify({
+
    Title = "LazixRobloxx",
+
    Content = "Ksg hub loaded",
+
    Duration = 6.5,
+
    Image = 4483362458,
+
 })
