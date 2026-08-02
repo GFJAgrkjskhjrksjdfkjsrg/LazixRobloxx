@@ -41,7 +41,8 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 
--- Settings
+-- Hitbox Settings
+
 local hitboxEnabled = false
 
 local hitboxX = 4.521
@@ -49,10 +50,20 @@ local hitboxY = 5.73
 local hitboxZ = 2.398
 
 
-local originalSize = nil
+local tackleHitboxEnabled = false
+
+local tackleHitboxX = 2.57
+local tackleHitboxY = 5.73
+local tackleHitboxZ = 2.064
 
 
--- Hitbox Function
+local originalHitboxSize = nil
+local originalTackleHitboxSize = nil
+
+
+
+-- Update Hitbox
+
 local function updateHitbox()
 
     local character = player.Character
@@ -61,14 +72,15 @@ local function updateHitbox()
         return
     end
 
+
     local hitbox = character:FindFirstChild("Hitbox")
 
     if hitbox and hitbox:IsA("BasePart") then
         
         if hitboxEnabled then
 
-            if not originalSize then
-                originalSize = hitbox.Size
+            if not originalHitboxSize then
+                originalHitboxSize = hitbox.Size
             end
 
             hitbox.Size = Vector3.new(
@@ -81,28 +93,78 @@ local function updateHitbox()
 
         else
 
-            if originalSize then
-                hitbox.Size = originalSize
+            if originalHitboxSize then
+                hitbox.Size = originalHitboxSize
             end
 
         end
 
     end
+
 end
 
 
--- Character respawn support
-player.CharacterAdded:Connect(function(character)
 
-    originalSize = nil
+-- Update TackleHitbox
 
-    local hitbox = character:WaitForChild("Hitbox", 5)
+local function updateTackleHitbox()
 
-    if hitbox then
-        updateHitbox()
+    local character = player.Character
+
+    if not character then
+        return
     end
 
+
+    local tackleHitbox = character:FindFirstChild("TackleHitbox")
+
+    if tackleHitbox and tackleHitbox:IsA("BasePart") then
+        
+        if tackleHitboxEnabled then
+
+            if not originalTackleHitboxSize then
+                originalTackleHitboxSize = tackleHitbox.Size
+            end
+
+            tackleHitbox.Size = Vector3.new(
+                tackleHitboxX,
+                tackleHitboxY,
+                tackleHitboxZ
+            )
+
+            tackleHitbox.Transparency = 1
+
+        else
+
+            if originalTackleHitboxSize then
+                tackleHitbox.Size = originalTackleHitboxSize
+            end
+
+        end
+
+    end
+
+end
+
+
+
+-- Respawn Support
+
+player.CharacterAdded:Connect(function(character)
+
+    originalHitboxSize = nil
+    originalTackleHitboxSize = nil
+
+
+    character:WaitForChild("Hitbox", 5)
+    character:WaitForChild("TackleHitbox", 5)
+
+
+    updateHitbox()
+    updateTackleHitbox()
+
 end)
+
 
 
 -- Tab
@@ -112,13 +174,16 @@ local HitboxTab = Window:CreateTab("Hitbox", "box")
 local Section = HitboxTab:CreateSection("Hitbox Settings")
 
 
-local Toggle = HitboxTab:CreateToggle({
+
+-- Hitbox Toggle
+
+HitboxTab:CreateToggle({
 
    Name = "Hitbox",
 
    CurrentValue = false,
 
-   Flag = "Toggle1",
+   Flag = "HitboxToggle",
 
    Callback = function(Value)
 
@@ -129,6 +194,7 @@ local Toggle = HitboxTab:CreateToggle({
    end,
 
 })
+
 
 
 HitboxTab:CreateInput({
@@ -216,6 +282,117 @@ HitboxTab:CreateInput({
    end,
 
 })
+
+
+
+-- TackleHitbox Toggle
+
+HitboxTab:CreateToggle({
+
+   Name = "TackleHitbox",
+
+   CurrentValue = false,
+
+   Flag = "TackleHitboxToggle",
+
+   Callback = function(Value)
+
+      tackleHitboxEnabled = Value
+
+      updateTackleHitbox()
+
+   end,
+
+})
+
+
+
+HitboxTab:CreateInput({
+
+   Name = "TackleHitbox (X)",
+
+   CurrentValue = tostring(tackleHitboxX),
+
+   PlaceholderText = "2.57",
+
+   RemoveTextAfterFocusLost = false,
+
+   Flag = "TackleHitboxX",
+
+   Callback = function(Text)
+
+      local value = tonumber(Text)
+
+      if value then
+
+         tackleHitboxX = value
+
+         updateTackleHitbox()
+
+      end
+
+   end,
+
+})
+
+
+HitboxTab:CreateInput({
+
+   Name = "TackleHitbox (Y)",
+
+   CurrentValue = tostring(tackleHitboxY),
+
+   PlaceholderText = "5.73",
+
+   RemoveTextAfterFocusLost = false,
+
+   Flag = "TackleHitboxY",
+
+   Callback = function(Text)
+
+      local value = tonumber(Text)
+
+      if value then
+
+         tackleHitboxY = value
+
+         updateTackleHitbox()
+
+      end
+
+   end,
+
+})
+
+
+HitboxTab:CreateInput({
+
+   Name = "TackleHitbox (Z)",
+
+   CurrentValue = tostring(tackleHitboxZ),
+
+   PlaceholderText = "2.064",
+
+   RemoveTextAfterFocusLost = false,
+
+   Flag = "TackleHitboxZ",
+
+   Callback = function(Text)
+
+      local value = tonumber(Text)
+
+      if value then
+
+         tackleHitboxZ = value
+
+         updateTackleHitbox()
+
+      end
+
+   end,
+
+})
+
 
 
 Rayfield:Notify({
