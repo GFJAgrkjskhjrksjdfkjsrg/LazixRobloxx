@@ -333,9 +333,9 @@ HitboxTab:CreateInput({
 
 })
 
-local TackleSection = HitboxTab:CreateSection("TackleHitbox")
+local TackleSection = HitboxTab:CreateSection("Tackle Hitbox")
 
--- TackleHitbox Toggle
+-- Tackle Hitbox Toggle
 
 HitboxTab:CreateToggle({
 
