@@ -49,12 +49,15 @@ local hitboxX = 4.521
 local hitboxY = 5.73
 local hitboxZ = 2.398
 
+local hitboxTransparency = 0
 
 local tackleHitboxEnabled = false
 
 local tackleHitboxX = 2.57
 local tackleHitboxY = 5.73
 local tackleHitboxZ = 2.064
+
+local tackleHitboxTransparency = 0
 
 
 local originalHitboxSize = nil
@@ -89,7 +92,7 @@ local function updateHitbox()
                 hitboxZ
             )
 
-            hitbox.Transparency = 1
+            hitbox.Transparency = hitboxTransparency
 
         else
 
@@ -132,7 +135,7 @@ local function updateTackleHitbox()
                 tackleHitboxZ
             )
 
-            tackleHitbox.Transparency = 1
+            tackleHitbox.Transparency = tackleHitboxTransparency
 
         else
 
@@ -283,6 +286,33 @@ HitboxTab:CreateInput({
 
 })
 
+HitboxTab:CreateInput({
+
+   Name = "Hitbox Transparency",
+
+   CurrentValue = tostring(hitboxTransparency),
+
+   PlaceholderText = "0",
+
+   RemoveTextAfterFocusLost = false,
+
+   Flag = "HitboxTransparency",
+
+   Callback = function(Text)
+
+      local value = tonumber(Text)
+
+      if value and value >= 0 and value <= 1 then
+
+         hitboxTransparency = value
+
+         updateHitbox()
+
+      end
+
+   end,
+
+})
 
 
 -- TackleHitbox Toggle
@@ -384,6 +414,34 @@ HitboxTab:CreateInput({
       if value then
 
          tackleHitboxZ = value
+
+         updateTackleHitbox()
+
+      end
+
+   end,
+
+})
+
+HitboxTab:CreateInput({
+
+   Name = "TackleHitbox Transparency",
+
+   CurrentValue = tostring(tackleHitboxTransparency),
+
+   PlaceholderText = "0",
+
+   RemoveTextAfterFocusLost = false,
+
+   Flag = "TackleHitboxTransparency",
+
+   Callback = function(Text)
+
+      local value = tonumber(Text)
+
+      if value and value >= 0 and value <= 1 then
+
+         tackleHitboxTransparency = value
 
          updateTackleHitbox()
 
