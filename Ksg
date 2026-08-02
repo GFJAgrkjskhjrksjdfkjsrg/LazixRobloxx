@@ -37,6 +37,7 @@ local Window = Rayfield:CreateWindow({
 
 -- Services
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 
@@ -61,8 +62,10 @@ local tackleHitboxTransparency = 0
 
 
 local originalHitboxSize = nil
-local originalTackleHitboxSize = nil
+local originalHitboxTransparency = nil
 
+local originalTackleHitboxSize = nil
+local originalTackleHitboxTransparency = nil
 
 
 -- Update Hitbox
@@ -86,6 +89,10 @@ local function updateHitbox()
                 originalHitboxSize = hitbox.Size
             end
 
+            if not originalHitboxTransparency then
+    originalHitboxTransparency = hitbox.Transparency
+end
+
             hitbox.Size = Vector3.new(
                 hitboxX,
                 hitboxY,
@@ -96,11 +103,15 @@ local function updateHitbox()
 
         else
 
-            if originalHitboxSize then
-                hitbox.Size = originalHitboxSize
-            end
+    if originalHitboxSize then
+        hitbox.Size = originalHitboxSize
+    end
 
-        end
+    if originalHitboxTransparency then
+        hitbox.Transparency = originalHitboxTransparency
+    end
+
+end
 
     end
 
@@ -129,6 +140,10 @@ local function updateTackleHitbox()
                 originalTackleHitboxSize = tackleHitbox.Size
             end
 
+            if not originalTackleHitboxTransparency then
+    originalTackleHitboxTransparency = tackleHitbox.Transparency
+end
+
             tackleHitbox.Size = Vector3.new(
                 tackleHitboxX,
                 tackleHitboxY,
@@ -139,11 +154,15 @@ local function updateTackleHitbox()
 
         else
 
-            if originalTackleHitboxSize then
-                tackleHitbox.Size = originalTackleHitboxSize
-            end
+    if originalTackleHitboxSize then
+        tackleHitbox.Size = originalTackleHitboxSize
+    end
 
-        end
+    if originalTackleHitboxTransparency then
+        tackleHitbox.Transparency = originalTackleHitboxTransparency
+    end
+
+end
 
     end
 
@@ -451,7 +470,13 @@ HitboxTab:CreateInput({
 
 })
 
+RunService.Heartbeat:Connect(function()
 
+    updateHitbox()
+
+    updateTackleHitbox()
+
+end)
 
 Rayfield:Notify({
 
