@@ -298,6 +298,8 @@ local MiscTab = Window:CreateTab("Misc", "list")
 
 local Section = MiscTab:CreateSection("BallTP")
 
+local WalkspeedSection = MiscTab:CreateSection("Walkspeed")
+
 MiscTab:CreateToggle({
 
     Name = "Ball TP",
@@ -333,8 +335,6 @@ local BallTPKeybind = MiscTab:CreateKeybind({
     end,
 
 })
-
-local WalkspeedSection = MiscTab:CreateSection("Walkspeed")
 
 MiscTab:CreateToggle({
 
