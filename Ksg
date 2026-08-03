@@ -471,6 +471,10 @@ HitboxTab:CreateInput({
 
 })
 
+local DribblesTab = Window:CreateTab("Dribbles", "tornado")
+
+local DribblesSection = DribblesTab:CreateSection("Dribbles")
+
 RunService.Heartbeat:Connect(function()
 
     updateHitbox()
@@ -478,10 +482,6 @@ RunService.Heartbeat:Connect(function()
     updateTackleHitbox()
 
 end)
-
-local DribblesTab = Window:CreateTab("Dribbles", "tornado")
-
-local DribblesSection = HitboxTab:CreateSection("Dribbles")
 
 Rayfield:Notify({
 
