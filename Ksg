@@ -1021,11 +1021,80 @@ local SettingsTab = Window:CreateTab("Settings", "settings")
 
 local Section = SettingsTab:CreateSection("Settings")
 
--- Tab
+-- Config Tab
 
 local ConfigTab = Window:CreateTab("Config", "save")
 
-local Section = ConfigTab:CreateSection("Config")
+local ConfigSection = ConfigTab:CreateSection("Configuration")
+
+
+ConfigTab:CreateButton({
+
+    Name = "Save Config",
+
+    Callback = function()
+
+        Rayfield:Notify({
+
+            Title = "Config",
+
+            Content = "Configuration saved",
+
+            Duration = 3,
+
+        })
+
+        Rayfield:SaveConfiguration()
+
+    end,
+
+})
+
+
+ConfigTab:CreateButton({
+
+    Name = "Load Config",
+
+    Callback = function()
+
+        Rayfield:LoadConfiguration()
+
+        Rayfield:Notify({
+
+            Title = "Config",
+
+            Content = "Configuration loaded",
+
+            Duration = 3,
+
+        })
+
+    end,
+
+})
+
+
+ConfigTab:CreateButton({
+
+    Name = "Delete Config",
+
+    Callback = function()
+
+        Rayfield:DeleteConfiguration()
+
+        Rayfield:Notify({
+
+            Title = "Config",
+
+            Content = "Configuration deleted",
+
+            Duration = 3,
+
+        })
+
+    end,
+
+})
 
 -- Tab
 
@@ -1040,6 +1109,24 @@ RunService.Heartbeat:Connect(function()
     updateTackleHitbox()
 
 end)
+
+
+
+
+
+Rayfield:LoadConfiguration()
+
+Rayfield:Notify({
+
+   Title = "LazixRobloxx",
+
+   Content = "Ksg hub loaded",
+
+   Duration = 6.5,
+
+   Image = 4483362458,
+
+})
 
 Rayfield:Notify({
 
