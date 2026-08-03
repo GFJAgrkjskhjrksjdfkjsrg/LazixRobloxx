@@ -52,6 +52,16 @@ local originalWalkSpeed = nil
 local speedConnection
 
 
+-- JumpPower Settings
+
+local jumpPowerEnabled = false
+local jumpPowerValue = 100
+
+local originalJumpPower = nil
+
+local jumpConnection
+
+
 -- Hitbox Settings
 
 local hitboxEnabled = false
@@ -283,6 +293,56 @@ local function updateWalkSpeed()
 
 end
 
+-- Update JumpPower
+
+local function updateJumpPower()
+
+    local character = player.Character
+
+    if not character then
+        return
+    end
+
+
+    local humanoid = character:FindFirstChild("Humanoid")
+
+    if not humanoid then
+        return
+    end
+
+
+    if not originalJumpPower then
+        originalJumpPower = humanoid.JumpPower
+    end
+
+
+    if jumpConnection then
+        jumpConnection:Disconnect()
+        jumpConnection = nil
+    end
+
+
+    if jumpPowerEnabled then
+
+        jumpConnection = RunService.RenderStepped:Connect(function()
+
+            if humanoid.Parent then
+
+                if humanoid.JumpPower ~= jumpPowerValue then
+                    humanoid.JumpPower = jumpPowerValue
+                end
+
+            end
+
+        end)
+
+    else
+
+        humanoid.JumpPower = originalJumpPower
+
+    end
+
+end
 
 -- Respawn Support
 
@@ -290,11 +350,13 @@ player.CharacterAdded:Connect(function(character)
 
     originalHitboxSize = nil
     originalTackleHitboxSize = nil
-        originalWalkSpeed = nil
+    originalWalkSpeed = nil
+    originalJumpPower = nil
 
     character:WaitForChild("Humanoid", 5)
 
     updateWalkSpeed()
+    updateJumpPower()
 
 
     character:WaitForChild("Hitbox", 5)
@@ -398,7 +460,54 @@ MiscTab:CreateInput({
 
 })
 
+local Section = MiscTab:CreateSection("JumpPower")
 
+MiscTab:CreateToggle({
+
+    Name = "JumpPower",
+
+    CurrentValue = false,
+
+    Flag = "JumpPowerToggle",
+
+    Callback = function(Value)
+
+        jumpPowerEnabled = Value
+
+        updateJumpPower()
+
+    end,
+
+})
+
+
+MiscTab:CreateInput({
+
+    Name = "JumpPower Value",
+
+    CurrentValue = tostring(jumpPowerValue),
+
+    PlaceholderText = "100",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "JumpPowerValue",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            jumpPowerValue = value
+
+            updateJumpPower()
+
+        end
+
+    end,
+
+})
 
 -- Tab
 
