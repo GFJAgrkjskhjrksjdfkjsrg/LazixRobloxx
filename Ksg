@@ -793,7 +793,157 @@ HitboxTab:CreateInput({
 
 local CosmeticsTab = Window:CreateTab("Cosmetics", "palette")
 
-local Section = CosmeticsTab:CreateSection("Cosmetics")
+
+-- Dribbles
+
+local DribblesSection = CosmeticsTab:CreateSection("Dribbles")
+
+
+CosmeticsTab:CreateToggle({
+
+    Name = "Enable Dribbles",
+
+    CurrentValue = false,
+
+    Flag = "DribblesToggle",
+
+    Callback = function(Value)
+
+        print("Dribbles Enabled:", Value)
+
+    end,
+
+})
+
+
+CosmeticsTab:CreateDropdown({
+
+    Name = "Select Dribble",
+
+    Options = {
+        "Dribble 1",
+        "Dribble 2",
+        "Dribble 3",
+        "Dribble 4"
+    },
+
+    CurrentOption = {
+        "Dribble 1"
+    },
+
+    MultipleOptions = false,
+
+    Flag = "DribbleDropdown",
+
+    Callback = function(Options)
+
+        print("Selected Dribble:", Options[1])
+
+    end,
+
+})
+
+
+
+-- Side Dribbles
+
+local SideDribblesSection = CosmeticsTab:CreateSection("Side Dribbles")
+
+
+CosmeticsTab:CreateToggle({
+
+    Name = "Enable Side Dribbles",
+
+    CurrentValue = false,
+
+    Flag = "SideDribblesToggle",
+
+    Callback = function(Value)
+
+        print("Side Dribbles Enabled:", Value)
+
+    end,
+
+})
+
+
+CosmeticsTab:CreateDropdown({
+
+    Name = "Select Side Dribble",
+
+    Options = {
+        "Side Dribble 1",
+        "Side Dribble 2",
+        "Side Dribble 3",
+        "Side Dribble 4"
+    },
+
+    CurrentOption = {
+        "Side Dribble 1"
+    },
+
+    MultipleOptions = false,
+
+    Flag = "SideDribbleDropdown",
+
+    Callback = function(Options)
+
+        print("Selected Side Dribble:", Options[1])
+
+    end,
+
+})
+
+
+
+-- Ball Themes
+
+local BallThemesSection = CosmeticsTab:CreateSection("Ball Themes")
+
+
+CosmeticsTab:CreateToggle({
+
+    Name = "Enable Ball Theme",
+
+    CurrentValue = false,
+
+    Flag = "BallThemeToggle",
+
+    Callback = function(Value)
+
+        print("Ball Theme Enabled:", Value)
+
+    end,
+
+})
+
+
+CosmeticsTab:CreateDropdown({
+
+    Name = "Select Ball Theme",
+
+    Options = {
+        "Theme 1",
+        "Theme 2",
+        "Theme 3",
+        "Theme 4"
+    },
+
+    CurrentOption = {
+        "Theme 1"
+    },
+
+    MultipleOptions = false,
+
+    Flag = "BallThemeDropdown",
+
+    Callback = function(Options)
+
+        print("Selected Ball Theme:", Options[1])
+
+    end,
+
+})
 
 -- Tab
 
