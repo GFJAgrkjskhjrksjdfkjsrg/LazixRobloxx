@@ -42,6 +42,13 @@ local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
+-- Walkspeed Settings
+
+local walkSpeedEnabled = false
+local walkSpeedValue = 32
+
+local speedConnection
+
 
 -- Hitbox Settings
 
@@ -223,12 +230,55 @@ local function teleportFootball()
 
 end
 
+
+-- Update Walkspeed
+
+local function updateWalkSpeed()
+
+    local character = player.Character
+
+    if not character then
+        return
+    end
+
+    local humanoid = character:FindFirstChild("Humanoid")
+
+    if not humanoid then
+        return
+    end
+
+
+    if speedConnection then
+        speedConnection:Disconnect()
+        speedConnection = nil
+    end
+
+
+    speedConnection = RunService.RenderStepped:Connect(function()
+
+        if walkSpeedEnabled and humanoid.Parent then
+
+            if humanoid.WalkSpeed ~= walkSpeedValue then
+                humanoid.WalkSpeed = walkSpeedValue
+            end
+
+        end
+
+    end)
+
+end
+
+
 -- Respawn Support
 
 player.CharacterAdded:Connect(function(character)
 
     originalHitboxSize = nil
     originalTackleHitboxSize = nil
+
+    character:WaitForChild("Humanoid", 5)
+
+    updateWalkSpeed()
 
 
     character:WaitForChild("Hitbox", 5)
@@ -246,7 +296,7 @@ end)
 
 local MiscTab = Window:CreateTab("Misc", "list")
 
-local Section = MiscTab:CreateSection("Misc")
+local Section = MiscTab:CreateSection("BallTP")
 
 MiscTab:CreateToggle({
 
@@ -278,6 +328,54 @@ local BallTPKeybind = MiscTab:CreateKeybind({
 
         if ballTPEnabled then
             teleportFootball()
+        end
+
+    end,
+
+})
+
+local WalkspeedSection = MiscTab:CreateSection("Walkspeed")
+
+MiscTab:CreateToggle({
+
+    Name = "Walkspeed",
+
+    CurrentValue = false,
+
+    Flag = "WalkspeedToggle",
+
+    Callback = function(Value)
+
+        walkSpeedEnabled = Value
+
+        updateWalkSpeed()
+
+    end,
+
+})
+
+MiscTab:CreateInput({
+
+    Name = "Walkspeed Value",
+
+    CurrentValue = tostring(walkSpeedValue),
+
+    PlaceholderText = "32",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "WalkspeedValue",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            walkSpeedValue = value
+
+            updateWalkSpeed()
+
         end
 
     end,
