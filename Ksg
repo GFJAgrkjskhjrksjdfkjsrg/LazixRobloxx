@@ -475,7 +475,7 @@ HitboxTab:CreateInput({
 
 -- Tab
 
-local CosmeticsTab = Window:CreateTab("Cosmetics", ".")
+local CosmeticsTab = Window:CreateTab("Cosmetics", "palette")
 
 local Section = CosmeticsTab:CreateSection("Cosmetics")
 
