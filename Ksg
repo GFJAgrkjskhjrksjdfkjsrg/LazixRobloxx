@@ -359,7 +359,7 @@ HitboxTab:CreateToggle({
 
 HitboxTab:CreateInput({
 
-   Name = "Tackle Hitbox (X)",
+   Name = "TackleHitbox (X)",
 
    CurrentValue = tostring(tackleHitboxX),
 
@@ -388,7 +388,7 @@ HitboxTab:CreateInput({
 
 HitboxTab:CreateInput({
 
-   Name = "Tackle Hitbox (Y)",
+   Name = "TackleHitbox (Y)",
 
    CurrentValue = tostring(tackleHitboxY),
 
@@ -417,7 +417,7 @@ HitboxTab:CreateInput({
 
 HitboxTab:CreateInput({
 
-   Name = "Tackle Hitbox (Z)",
+   Name = "TackleHitbox (Z)",
 
    CurrentValue = tostring(tackleHitboxZ),
 
@@ -478,6 +478,10 @@ RunService.Heartbeat:Connect(function()
     updateTackleHitbox()
 
 end)
+
+local DribblesTab = Window:CreateTab("Dribbles", "tornado")
+
+local DribblesSection = HitboxTab:CreateSection("Dribbles")
 
 Rayfield:Notify({
 
