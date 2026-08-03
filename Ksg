@@ -580,15 +580,15 @@ local Section = SettingsTab:CreateSection("Settings")
 
 -- Tab
 
-local AboutTab = Window:CreateTab("About", "info")
-
-local Section = AboutTab:CreateSection("About")
-
--- Tab
-
 local ConfigTab = Window:CreateTab("Config", "save")
 
 local Section = ConfigTab:CreateSection("Config")
+
+-- Tab
+
+local AboutTab = Window:CreateTab("About", "info")
+
+local Section = AboutTab:CreateSection("About")
 
 RunService.Heartbeat:Connect(function()
 
