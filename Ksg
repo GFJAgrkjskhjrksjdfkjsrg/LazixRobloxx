@@ -264,26 +264,20 @@ MiscTab:CreateToggle({
 
 })
 
-MiscTab:CreateInput({
+local BallTPKeybind = MiscTab:CreateKeybind({
 
     Name = "Ball TP Keybind",
 
-    CurrentValue = "LeftControl",
+    CurrentKeybind = "LeftControl",
 
-    PlaceholderText = "LeftControl",
-
-    RemoveTextAfterFocusLost = false,
+    HoldToInteract = false,
 
     Flag = "BallTPKeybind",
 
-    Callback = function(Text)
+    Callback = function()
 
-        local success, key = pcall(function()
-            return Enum.KeyCode[Text]
-        end)
-
-        if success and key then
-            ballTPKeybind = key
+        if ballTPEnabled then
+            teleportFootball()
         end
 
     end,
@@ -595,18 +589,6 @@ local Section = AboutTab:CreateSection("About")
 local ConfigTab = Window:CreateTab("Config", "save")
 
 local Section = ConfigTab:CreateSection("Config")
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-
-    if gameProcessed then
-        return
-    end
-
-    if ballTPEnabled and input.KeyCode == ballTPKeybind then
-        teleportFootball()
-    end
-
-end)
 
 RunService.Heartbeat:Connect(function()
 
