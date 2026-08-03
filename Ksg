@@ -471,9 +471,25 @@ HitboxTab:CreateInput({
 
 })
 
-local DribblesTab = Window:CreateTab("Dribbles", "tornado")
+local DribblesTab = Window:CreateTab("Dribbles", "rocket")
 
 local Section = DribblesTab:CreateSection("Dribbles")
+
+local MiscTab = Window:CreateTab("Misc", "list")
+
+local Section = MiscTab:CreateSection("Misc")
+
+local SettingsTab = Window:CreateTab("Settings", "settings")
+
+local Section = SettingsTab:CreateSection("Settings")
+
+local AboutTab = Window:CreateTab("About", "info")
+
+local Section = AboutTab:CreateSection("About")
+
+local ConfigTab = Window:CreateTab("Config", "save")
+
+local Section = ConfigTab:CreateSection("Config")
 
 RunService.Heartbeat:Connect(function()
 
