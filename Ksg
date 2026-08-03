@@ -112,8 +112,32 @@ end
 local selectedSideDribble = "Flair Spin"
 local sideDribbleEnabled = false
 
+local function updateSideDribble()
+
+    if sideDribbleEnabled then
+
+        player:SetAttribute("EquippedSideDribble", selectedSideDribble)
+
+        print("Equipped Side Dribble:", selectedSideDribble)
+
+    end
+
+end
+
 local selectedBallTheme = "Snowball"
 local ballThemeEnabled = false
+
+local function updateBallTheme()
+
+    if ballThemeEnabled then
+
+        player:SetAttribute("EquippedBallTheme", selectedBallTheme)
+
+        print("Equipped Ball Theme:", selectedBallTheme)
+
+    end
+
+end
 
 -- Update Hitbox
 
@@ -889,7 +913,9 @@ CosmeticsTab:CreateToggle({
 
     Callback = function(Value)
 
-        print("Side Dribbles Enabled:", Value)
+    sideDribbleEnabled = Value
+
+    updateSideDribble()
 
     end,
 
@@ -918,7 +944,9 @@ CosmeticsTab:CreateDropdown({
 
     Callback = function(Options)
 
-        print("Selected Side Dribble:", Options[1])
+    selectedSideDribble = Options[1]
+
+    updateSideDribble()
 
     end,
 
@@ -941,7 +969,9 @@ CosmeticsTab:CreateToggle({
 
     Callback = function(Value)
 
-        print("Ball Theme Enabled:", Value)
+    ballThemeEnabled = Value
+
+    updateBallTheme()
 
     end,
 
@@ -977,7 +1007,9 @@ CosmeticsTab:CreateDropdown({
 
     Callback = function(Options)
 
-        print("Selected Ball Theme:", Options[1])
+    selectedBallTheme = Options[1]
+
+    updateBallTheme()
 
     end,
 
