@@ -187,7 +187,17 @@ player.CharacterAdded:Connect(function(character)
 
 end)
 
+-- Tab
 
+local MiscTab = Window:CreateTab("Misc", "list")
+
+local Section = MiscTab:CreateSection("Misc")
+
+-- Tab
+
+local HitboxTab = Window:CreateTab("Hitbox", "box")
+
+local HitboxSection = HitboxTab:CreateSection("Hitbox")
 
 -- Hitbox Toggle
 
@@ -463,6 +473,29 @@ HitboxTab:CreateInput({
 
 })
 
+-- Tab
+
+local CosmeticsTab = Window:CreateTab("Cosmetics", ".")
+
+local Section = CosmeticsTab:CreateSection("Cosmetics")
+
+-- Tab
+
+local SettingsTab = Window:CreateTab("Settings", "settings")
+
+local Section = SettingsTab:CreateSection("Settings")
+
+-- Tab
+
+local AboutTab = Window:CreateTab("About", "info")
+
+local Section = AboutTab:CreateSection("About")
+
+-- Tab
+
+local ConfigTab = Window:CreateTab("Config", "save")
+
+local Section = ConfigTab:CreateSection("Config")
 
 
 RunService.Heartbeat:Connect(function()
