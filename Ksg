@@ -824,8 +824,8 @@ CosmeticsTab:CreateDropdown({
         "Float",
         "Penguin Slide",
         "Front Flip",
-        "Flip"
-        "WC26 Trophy Dribble"
+        "Flip",
+        "WC26 Trophy Dribble",
         "Rainbow Flick"
     },
 
@@ -877,7 +877,7 @@ CosmeticsTab:CreateDropdown({
         "Flair Spin",
         "Heel to Ball Roll",
         "Juke",
-        "Hocus Pocus"
+        "Hocus Pocus",
         "Portugal Chop"
     },
 
@@ -929,14 +929,14 @@ CosmeticsTab:CreateDropdown({
         "Snowball",
         "Fireball",
         "Celestial Awakening Ball",
-        "Inferno Dragon Ball"
-        "Thunder Emperor Ball"
-        "Pumpkin Ball"
-        "The Bomb"
-        "Gumball"
-        "Fishbowl"
-        "Spiky"
-        "Disco"
+        "Inferno Dragon Ball",
+        "Thunder Emperor Ball",
+        "Pumpkin Ball",
+        "The Bomb",
+        "Gumball",
+        "Fishbowl",
+        "Spiky",
+        "Disco",
         "8-Bit"
     },
 
