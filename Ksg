@@ -38,6 +38,7 @@ local Window = Rayfield:CreateWindow({
 -- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
@@ -67,6 +68,10 @@ local originalHitboxTransparency = nil
 local originalTackleHitboxSize = nil
 local originalTackleHitboxTransparency = nil
 
+-- Ball TP Settings
+
+local ballTPEnabled = false
+local ballTPKeybind = Enum.KeyCode.LeftControl
 
 -- Update Hitbox
 
@@ -168,7 +173,55 @@ end
 
 end
 
+local function getFootball()
 
+    local misc = workspace:FindFirstChild("Misc")
+
+    if not misc then
+        return nil
+    end
+
+    for _, obj in ipairs(misc:GetChildren()) do
+        if obj.Name:match("^Football") then
+            return obj
+        end
+    end
+
+    return nil
+end
+
+
+local function teleportFootball()
+
+    local character = player.Character
+    if not character then return end
+
+    local root = character:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+
+    local football = getFootball()
+    if not football then return end
+
+    local target = root.CFrame
+
+    if football:IsA("Model") then
+
+        football:PivotTo(target)
+
+        if football.PrimaryPart then
+            football.PrimaryPart.AssemblyLinearVelocity = Vector3.zero
+            football.PrimaryPart.AssemblyAngularVelocity = Vector3.zero
+        end
+
+    elseif football:IsA("BasePart") then
+
+        football.CFrame = target
+        football.AssemblyLinearVelocity = Vector3.zero
+        football.AssemblyAngularVelocity = Vector3.zero
+
+    end
+
+end
 
 -- Respawn Support
 
@@ -187,11 +240,57 @@ player.CharacterAdded:Connect(function(character)
 
 end)
 
+
+
 -- Tab
 
 local MiscTab = Window:CreateTab("Misc", "list")
 
 local Section = MiscTab:CreateSection("Misc")
+
+MiscTab:CreateToggle({
+
+    Name = "Ball TP",
+
+    CurrentValue = false,
+
+    Flag = "BallTP",
+
+    Callback = function(Value)
+
+        ballTPEnabled = Value
+
+    end,
+
+})
+
+MiscTab:CreateInput({
+
+    Name = "Ball TP Keybind",
+
+    CurrentValue = "LeftControl",
+
+    PlaceholderText = "LeftControl",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "BallTPKeybind",
+
+    Callback = function(Text)
+
+        local success, key = pcall(function()
+            return Enum.KeyCode[Text]
+        end)
+
+        if success and key then
+            ballTPKeybind = key
+        end
+
+    end,
+
+})
+
+
 
 -- Tab
 
@@ -497,6 +596,17 @@ local ConfigTab = Window:CreateTab("Config", "save")
 
 local Section = ConfigTab:CreateSection("Config")
 
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+
+    if gameProcessed then
+        return
+    end
+
+    if ballTPEnabled and input.KeyCode == ballTPKeybind then
+        teleportFootball()
+    end
+
+end)
 
 RunService.Heartbeat:Connect(function()
 
