@@ -92,6 +92,29 @@ local originalTackleHitboxTransparency = nil
 local ballTPEnabled = false
 local ballTPKeybind = Enum.KeyCode.LeftControl
 
+-- Cosmetics Settings
+
+local selectedDribble = "Float"
+local dribbleEnabled = false
+
+local function updateDribble()
+
+    if dribbleEnabled then
+
+        player:SetAttribute("EquippedDribble", selectedDribble)
+
+        print("Equipped Dribble:", selectedDribble)
+
+    end
+
+end
+
+local selectedSideDribble = "Flair Spin"
+local sideDribbleEnabled = false
+
+local selectedBallTheme = "Snowball"
+local ballThemeEnabled = false
+
 -- Update Hitbox
 
 local function updateHitbox()
@@ -809,7 +832,9 @@ CosmeticsTab:CreateToggle({
 
     Callback = function(Value)
 
-        print("Dribbles Enabled:", Value)
+    dribbleEnabled = Value
+
+    updateDribble()
 
     end,
 
@@ -839,7 +864,9 @@ CosmeticsTab:CreateDropdown({
 
     Callback = function(Options)
 
-        print("Selected Dribble:", Options[1])
+    selectedDribble = Options[1]
+
+    updateDribble()
 
     end,
 
