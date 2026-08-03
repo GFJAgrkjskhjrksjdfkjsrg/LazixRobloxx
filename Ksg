@@ -471,23 +471,9 @@ HitboxTab:CreateInput({
 
 })
 
-DribbleTab:CreateToggle({
+local Tab = Window:CreateTab("Dribbles", 4483362458) -- Title, Image
 
-   Name = "Dribble",
-
-   CurrentValue = false,
-
-   Flag = "DribbleToggle",
-
-   Callback = function(Value)
-
-      dribbleEnabled = Value
-
-      updateDribble()
-
-   end,
-
-})
+local Tab = Window:CreateTab("Dribbles", "tornado")
 
 RunService.Heartbeat:Connect(function()
 
