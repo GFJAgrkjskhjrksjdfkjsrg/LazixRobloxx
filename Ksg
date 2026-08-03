@@ -187,7 +187,11 @@ player.CharacterAdded:Connect(function(character)
 
 end)
 
+-- Tab
 
+local MiscTab = Window:CreateTab("Misc", "list")
+
+local Section = MiscTab:CreateSection("Misc")
 
 -- Tab
 
@@ -471,21 +475,25 @@ HitboxTab:CreateInput({
 
 })
 
+-- Tab
+
 local DribblesTab = Window:CreateTab("Dribbles", "rocket")
 
 local Section = DribblesTab:CreateSection("Dribbles")
 
-local MiscTab = Window:CreateTab("Misc", "list")
-
-local Section = MiscTab:CreateSection("Misc")
+-- Tab
 
 local SettingsTab = Window:CreateTab("Settings", "settings")
 
 local Section = SettingsTab:CreateSection("Settings")
 
+-- Tab
+
 local AboutTab = Window:CreateTab("About", "info")
 
 local Section = AboutTab:CreateSection("About")
+
+-- Tab
 
 local ConfigTab = Window:CreateTab("Config", "save")
 
