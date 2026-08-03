@@ -821,14 +821,16 @@ CosmeticsTab:CreateDropdown({
     Name = "Select Dribble",
 
     Options = {
-        "Dribble 1",
-        "Dribble 2",
-        "Dribble 3",
-        "Dribble 4"
+        "Float",
+        "Penguin Slide",
+        "Front Flip",
+        "Flip"
+        "WC26 Trophy Dribble"
+        "Rainbow Flick"
     },
 
     CurrentOption = {
-        "Dribble 1"
+        "Float"
     },
 
     MultipleOptions = false,
@@ -872,14 +874,15 @@ CosmeticsTab:CreateDropdown({
     Name = "Select Side Dribble",
 
     Options = {
-        "Side Dribble 1",
-        "Side Dribble 2",
-        "Side Dribble 3",
-        "Side Dribble 4"
+        "Flair Spin",
+        "Heel to Ball Roll",
+        "Juke",
+        "Hocus Pocus"
+        "Portugal Chop"
     },
 
     CurrentOption = {
-        "Side Dribble 1"
+        "Flair Spin"
     },
 
     MultipleOptions = false,
@@ -923,14 +926,22 @@ CosmeticsTab:CreateDropdown({
     Name = "Select Ball Theme",
 
     Options = {
-        "Theme 1",
-        "Theme 2",
-        "Theme 3",
-        "Theme 4"
+        "Snowball",
+        "Fireball",
+        "Celestial Awakening Ball",
+        "Inferno Dragon Ball"
+        "Thunder Emperor Ball"
+        "Pumpkin Ball"
+        "The Bomb"
+        "Gumball"
+        "Fishbowl"
+        "Spiky"
+        "Disco"
+        "8-Bit"
     },
 
     CurrentOption = {
-        "Theme 1"
+        "Snowball"
     },
 
     MultipleOptions = false,
