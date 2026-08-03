@@ -47,6 +47,8 @@ local player = Players.LocalPlayer
 local walkSpeedEnabled = false
 local walkSpeedValue = 32
 
+local originalWalkSpeed = nil
+
 local speedConnection
 
 
@@ -248,23 +250,36 @@ local function updateWalkSpeed()
     end
 
 
+    if not originalWalkSpeed then
+        originalWalkSpeed = humanoid.WalkSpeed
+    end
+
+
     if speedConnection then
         speedConnection:Disconnect()
         speedConnection = nil
     end
 
 
-    speedConnection = RunService.RenderStepped:Connect(function()
+    if walkSpeedEnabled then
 
-        if walkSpeedEnabled and humanoid.Parent then
+        speedConnection = RunService.RenderStepped:Connect(function()
 
-            if humanoid.WalkSpeed ~= walkSpeedValue then
-                humanoid.WalkSpeed = walkSpeedValue
+            if humanoid.Parent then
+
+                if humanoid.WalkSpeed ~= walkSpeedValue then
+                    humanoid.WalkSpeed = walkSpeedValue
+                end
+
             end
 
-        end
+        end)
 
-    end)
+    else
+
+        humanoid.WalkSpeed = originalWalkSpeed
+
+    end
 
 end
 
@@ -275,6 +290,7 @@ player.CharacterAdded:Connect(function(character)
 
     originalHitboxSize = nil
     originalTackleHitboxSize = nil
+        originalWalkSpeed = nil
 
     character:WaitForChild("Humanoid", 5)
 
