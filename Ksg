@@ -1356,6 +1356,11 @@ local AboutTab = Window:CreateTab("About", "info")
 
 local Section = AboutTab:CreateSection("About")
 
+AboutTab:CreateParagraph({
+    Title = "About",
+    Content = "Developed by LazixRobloxx & Ksg.\n\nBuilt for Roblox sports games.\nRefined through experience.\nMade to stand above the rest.\n\nKSG HUB #1."
+})
+
 RunService.Heartbeat:Connect(function()
 
     updateHitbox()
