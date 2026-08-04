@@ -80,12 +80,242 @@ local tackleHitboxZ = 2.064
 
 local tackleHitboxTransparency = 0
 
+-- Ball Trajectory Settings
+
+local ballTrajectoryEnabled = false
+
+local trajectoryBall = nil
+local trajectoryStateConnection = nil
+local lastVelocity = Vector3.zero
+local predicting = false
+
+local trajectoryFolder = Instance.new("Folder")
+trajectoryFolder.Name = "TrajectoryLine"
+trajectoryFolder.Parent = workspace
+
+local KICK_THRESHOLD = 8
+local SAMPLE_DELAY = 0.05
+local SIM_STEP = 0.05
+local SIM_DURATION = 1
+local LINE_LIFETIME = 2
+local LINE_THICKNESS = 0.15
 
 local originalHitboxSize = nil
 local originalHitboxTransparency = nil
 
 local originalTackleHitboxSize = nil
 local originalTackleHitboxTransparency = nil
+
+
+
+-- BALL TRAJECTORY SYSTEM
+
+local function findTrajectoryFootball()
+
+    local misc = workspace:FindFirstChild("Misc")
+
+    if not misc then
+        return nil
+    end
+
+    for _, obj in ipairs(misc:GetChildren()) do
+
+        if obj:IsA("BasePart") and obj.Name:match("^Football") then
+            return obj
+        end
+
+    end
+
+    return nil
+
+end
+
+
+local function clearTrajectoryLine()
+
+    for _, child in ipairs(trajectoryFolder:GetChildren()) do
+        child:Destroy()
+    end
+
+end
+
+
+local function addTrajectorySegment(pointA, pointB)
+
+    local distance = (pointB - pointA).Magnitude
+
+    if distance < 0.01 then
+        return
+    end
+
+
+    local segment = Instance.new("Part")
+
+    segment.Anchored = true
+    segment.CanCollide = false
+    segment.CanQuery = false
+    segment.CanTouch = false
+
+    segment.Material = Enum.Material.Neon
+    segment.Color = Color3.fromRGB(255,80,0)
+
+    segment.Size = Vector3.new(
+        LINE_THICKNESS,
+        LINE_THICKNESS,
+        distance
+    )
+
+    segment.CFrame =
+        CFrame.new(pointA, pointB)
+        * CFrame.new(0,0,-distance / 2)
+
+    segment.Parent = trajectoryFolder
+
+end
+
+
+local function drawBallTrajectory(startPosition, startVelocity, acceleration)
+
+    clearTrajectoryLine()
+
+    local previousPoint = startPosition
+    local velocity = startVelocity
+
+    local elapsed = 0
+
+
+    while elapsed < SIM_DURATION do
+
+        elapsed += SIM_STEP
+
+        velocity += acceleration * SIM_STEP
+
+        local nextPoint =
+            previousPoint + velocity * SIM_STEP
+
+
+        addTrajectorySegment(
+            previousPoint,
+            nextPoint
+        )
+
+        previousPoint = nextPoint
+
+    end
+
+
+    task.delay(LINE_LIFETIME,function()
+
+        clearTrajectoryLine()
+
+    end)
+
+end
+
+
+local function predictBallTrajectory()
+
+    if predicting then
+        return
+    end
+
+    if not trajectoryBall then
+        return
+    end
+
+
+    predicting = true
+
+
+    local position =
+        trajectoryBall.Position
+
+    local velocity =
+        trajectoryBall.AssemblyLinearVelocity
+
+
+    task.wait(SAMPLE_DELAY)
+
+
+    if not trajectoryBall
+    or not trajectoryBall.Parent then
+
+        predicting = false
+        return
+
+    end
+
+
+    local newVelocity =
+        trajectoryBall.AssemblyLinearVelocity
+
+
+    local acceleration =
+        (newVelocity - velocity)
+        / SAMPLE_DELAY
+
+
+    drawBallTrajectory(
+        position,
+        velocity,
+        acceleration
+    )
+
+
+    predicting = false
+
+end
+
+
+local function connectTrajectoryBall(ball)
+
+    if trajectoryStateConnection then
+
+        trajectoryStateConnection:Disconnect()
+
+        trajectoryStateConnection = nil
+
+    end
+
+
+    trajectoryBall = ball
+
+
+    if not trajectoryBall then
+        return
+    end
+
+
+    lastVelocity =
+        trajectoryBall.AssemblyLinearVelocity
+
+
+    local lastState =
+        trajectoryBall:GetAttribute("State")
+
+
+    trajectoryStateConnection =
+        trajectoryBall:GetAttributeChangedSignal("State"):Connect(function()
+
+
+            local newState =
+                trajectoryBall:GetAttribute("State")
+
+
+            if lastState == "Possessed"
+            and newState ~= "Possessed" then
+
+                predictBallTrajectory()
+
+            end
+
+
+            lastState = newState
+
+
+        end)
+
+end
 
 -- Ball TP Settings
 
@@ -453,6 +683,30 @@ local BallTPKeybind = MiscTab:CreateKeybind({
 
         if ballTPEnabled then
             teleportFootball()
+        end
+
+    end,
+
+})
+
+local BallTrajectorySection = MiscTab:CreateSection("Ball Trajectory")
+
+MiscTab:CreateToggle({
+
+    Name = "Ball Trajectory",
+
+    CurrentValue = false,
+
+    Flag = "BallTrajectoryToggle",
+
+    Callback = function(Value)
+
+        ballTrajectoryEnabled = Value
+
+        if not Value then
+
+            clearTrajectoryLine()
+
         end
 
     end,
@@ -1107,6 +1361,47 @@ RunService.Heartbeat:Connect(function()
     updateHitbox()
 
     updateTackleHitbox()
+
+
+    if ballTrajectoryEnabled then
+
+        if not trajectoryBall or not trajectoryBall.Parent then
+
+            local foundBall = findTrajectoryFootball()
+
+            if foundBall then
+
+                connectTrajectoryBall(foundBall)
+
+            end
+
+        else
+
+            if trajectoryBall:GetAttribute("State") ~= "Possessed" then
+
+                local currentVelocity =
+                    trajectoryBall.AssemblyLinearVelocity
+
+
+                local velocityDelta =
+                    (currentVelocity - lastVelocity).Magnitude
+
+
+                if velocityDelta > KICK_THRESHOLD
+                and not predicting then
+
+                    predictBallTrajectory()
+
+                end
+
+
+                lastVelocity = currentVelocity
+
+            end
+
+        end
+
+    end
 
 end)
 
