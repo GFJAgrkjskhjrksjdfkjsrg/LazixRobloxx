@@ -96,6 +96,14 @@ local awayGoalHitboxZ = 8.289
 local originalHomeGoalHitboxSize = nil
 local originalAwayGoalHitboxSize = nil
 
+local homeGoalTransparency = 1
+local awayGoalTransparency = 1
+
+local originalHomeGoalTransparency = nil
+local originalAwayGoalTransparency = nil
+
+
+
 -- Ball Trajectory Settings
 
 local ballTrajectoryEnabled = false
@@ -502,18 +510,26 @@ local function updateHomeGoalHitbox()
                 originalHomeGoalHitboxSize = hitbox.Size
             end
 
+            if not originalHomeGoalTransparency then
+                originalHomeGoalTransparency = hitbox.Transparency
+            end
+
             hitbox.Size = Vector3.new(
                 homeGoalHitboxX,
                 homeGoalHitboxY,
                 homeGoalHitboxZ
             )
 
-            hitbox.Transparency = 1
+            hitbox.Transparency = homeGoalTransparency
 
         else
 
             if originalHomeGoalHitboxSize then
                 hitbox.Size = originalHomeGoalHitboxSize
+            end
+
+            if originalHomeGoalTransparency then
+                hitbox.Transparency = originalHomeGoalTransparency
             end
 
         end
@@ -539,18 +555,26 @@ local function updateAwayGoalHitbox()
                 originalAwayGoalHitboxSize = hitbox.Size
             end
 
+            if not originalAwayGoalTransparency then
+                originalAwayGoalTransparency = hitbox.Transparency
+            end
+
             hitbox.Size = Vector3.new(
                 awayGoalHitboxX,
                 awayGoalHitboxY,
                 awayGoalHitboxZ
             )
 
-            hitbox.Transparency = 1
+            hitbox.Transparency = awayGoalTransparency
 
         else
 
             if originalAwayGoalHitboxSize then
                 hitbox.Size = originalAwayGoalHitboxSize
+            end
+
+            if originalAwayGoalTransparency then
+                hitbox.Transparency = originalAwayGoalTransparency
             end
 
         end
@@ -1285,6 +1309,34 @@ HitboxTab:CreateInput({
 
 })
 
+HitboxTab:CreateInput({
+
+    Name = "Home Goal Transparency",
+
+    CurrentValue = tostring(homeGoalTransparency),
+
+    PlaceholderText = "1",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "HomeGoalTransparency",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value and value >= 0 and value <= 1 then
+
+            homeGoalTransparency = value
+
+            updateHomeGoalHitbox()
+
+        end
+
+    end,
+
+})
+
 local AwayGoalSection = HitboxTab:CreateSection("Away Goal Hitbox")
 
 HitboxTab:CreateToggle({
@@ -1380,6 +1432,34 @@ HitboxTab:CreateInput({
         if value then
 
             awayGoalHitboxZ = value
+
+            updateAwayGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Away Goal Transparency",
+
+    CurrentValue = tostring(awayGoalTransparency),
+
+    PlaceholderText = "1",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "AwayGoalTransparency",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value and value >= 0 and value <= 1 then
+
+            awayGoalTransparency = value
 
             updateAwayGoalHitbox()
 
