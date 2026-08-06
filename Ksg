@@ -80,6 +80,22 @@ local tackleHitboxZ = 2.064
 
 local tackleHitboxTransparency = 0
 
+-- Goal Hitbox Settings
+
+local homeGoalHitboxEnabled = false
+local awayGoalHitboxEnabled = false
+
+local homeGoalHitboxX = 31.327
+local homeGoalHitboxY = 11.278
+local homeGoalHitboxZ = 8.289
+
+local awayGoalHitboxX = 31.327
+local awayGoalHitboxY = 11.278
+local awayGoalHitboxZ = 8.289
+
+local originalHomeGoalHitboxSize = nil
+local originalAwayGoalHitboxSize = nil
+
 -- Ball Trajectory Settings
 
 local ballTrajectoryEnabled = false
@@ -469,6 +485,80 @@ end
 
 end
 
+local function updateHomeGoalHitbox()
+
+    local hitbox = workspace
+        :WaitForChild("Stadium")
+        :WaitForChild("Teams")
+        :WaitForChild("Home")
+        :WaitForChild("Goal")
+        :WaitForChild("Hitbox")
+
+    if hitbox and hitbox:IsA("BasePart") then
+
+        if homeGoalHitboxEnabled then
+
+            if not originalHomeGoalHitboxSize then
+                originalHomeGoalHitboxSize = hitbox.Size
+            end
+
+            hitbox.Size = Vector3.new(
+                homeGoalHitboxX,
+                homeGoalHitboxY,
+                homeGoalHitboxZ
+            )
+
+            hitbox.Transparency = 1
+
+        else
+
+            if originalHomeGoalHitboxSize then
+                hitbox.Size = originalHomeGoalHitboxSize
+            end
+
+        end
+
+    end
+
+end
+
+local function updateAwayGoalHitbox()
+
+    local hitbox = workspace
+        :WaitForChild("Stadium")
+        :WaitForChild("Teams")
+        :WaitForChild("Away")
+        :WaitForChild("Goal")
+        :WaitForChild("Hitbox")
+
+    if hitbox and hitbox:IsA("BasePart") then
+
+        if awayGoalHitboxEnabled then
+
+            if not originalAwayGoalHitboxSize then
+                originalAwayGoalHitboxSize = hitbox.Size
+            end
+
+            hitbox.Size = Vector3.new(
+                awayGoalHitboxX,
+                awayGoalHitboxY,
+                awayGoalHitboxZ
+            )
+
+            hitbox.Transparency = 1
+
+        else
+
+            if originalAwayGoalHitboxSize then
+                hitbox.Size = originalAwayGoalHitboxSize
+            end
+
+        end
+
+    end
+
+end
+
 local function getFootball()
 
     local misc = workspace:FindFirstChild("Misc")
@@ -642,6 +732,8 @@ player.CharacterAdded:Connect(function(character)
 
     updateHitbox()
     updateTackleHitbox()
+    updateHomeGoalHitbox()
+    updateAwayGoalHitbox()
 
 end)
 
@@ -1090,6 +1182,213 @@ HitboxTab:CreateInput({
 
 })
 
+local HomeGoalSection = HitboxTab:CreateSection("Home Goal Hitbox")
+
+HitboxTab:CreateToggle({
+
+    Name = "Home Goal Hitbox",
+
+    CurrentValue = false,
+
+    Flag = "HomeGoalHitboxToggle",
+
+    Callback = function(Value)
+
+        homeGoalHitboxEnabled = Value
+        updateHomeGoalHitbox()
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Home Goal Hitbox (X)",
+
+    CurrentValue = tostring(homeGoalHitboxX),
+
+    PlaceholderText = "31.327",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "HomeGoalHitboxX",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            homeGoalHitboxX = value
+
+            updateHomeGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Home Goal Hitbox (Y)",
+
+    CurrentValue = tostring(homeGoalHitboxY),
+
+    PlaceholderText = "11.278",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "HomeGoalHitboxY",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            homeGoalHitboxY = value
+
+            updateHomeGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Home Goal Hitbox (Z)",
+
+    CurrentValue = tostring(homeGoalHitboxZ),
+
+    PlaceholderText = "8.289",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "HomeGoalHitboxZ",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            homeGoalHitboxZ = value
+
+            updateHomeGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+local AwayGoalSection = HitboxTab:CreateSection("Away Goal Hitbox")
+
+HitboxTab:CreateToggle({
+
+    Name = "Away Goal Hitbox",
+
+    CurrentValue = false,
+
+    Flag = "AwayGoalHitboxToggle",
+
+    Callback = function(Value)
+
+        awayGoalHitboxEnabled = Value
+
+        updateAwayGoalHitbox()
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Away Goal Hitbox (X)",
+
+    CurrentValue = tostring(awayGoalHitboxX),
+
+    PlaceholderText = "31.327",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "AwayGoalHitboxX",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            awayGoalHitboxX = value
+
+            updateAwayGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Away Goal Hitbox (Y)",
+
+    CurrentValue = tostring(awayGoalHitboxY),
+
+    PlaceholderText = "11.278",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "AwayGoalHitboxY",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            awayGoalHitboxY = value
+
+            updateAwayGoalHitbox()
+
+        end
+
+    end,
+
+})
+
+HitboxTab:CreateInput({
+
+    Name = "Away Goal Hitbox (Z)",
+
+    CurrentValue = tostring(awayGoalHitboxZ),
+
+    PlaceholderText = "8.289",
+
+    RemoveTextAfterFocusLost = false,
+
+    Flag = "AwayGoalHitboxZ",
+
+    Callback = function(Text)
+
+        local value = tonumber(Text)
+
+        if value then
+
+            awayGoalHitboxZ = value
+
+            updateAwayGoalHitbox()
+
+        end
+
+    end,
+
+})
+
 -- Tab
 
 local CosmeticsTab = Window:CreateTab("Cosmetics", "palette")
@@ -1364,9 +1663,9 @@ AboutTab:CreateParagraph({
 RunService.Heartbeat:Connect(function()
 
     updateHitbox()
-
     updateTackleHitbox()
-
+    updateHomeGoalHitbox()
+    updateAwayGoalHitbox()
 
     if ballTrajectoryEnabled then
 
